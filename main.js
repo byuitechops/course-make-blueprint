@@ -1,28 +1,32 @@
 /*eslint-env node, es6*/
+/*eslint no-console:1*/
+
 
 /* Module Description */
+/* Makes the current course a blueprint course*/
 
 /* Put dependencies here */
-
-/* Include this line only if you are going to use Canvas API */
-// const canvas = require('canvas-wrapper');
-
-/* View available course object functions */
-// https://github.com/byuitechops/d2l-to-canvas-conversion-tool/blob/master/documentation/classFunctions.md
+const canvas = require('canvas-wrapper');
 
 module.exports = (course, stepCallback) => {
-    /* Create the module report so that we can access it later as needed.
-    This MUST be done at the beginning of each child module. */
-    course.addModuleReport('moduleName');
+    course.addModuleReport('course-make-blueprint');
 
-    /* Used to log successful actions */
-    course.success('moduleName', 'moduleName successfully ...');
+    if (course.settings.online === false) {
+        course.success('course-make-blueprint', 'course-make-blueprint successfully determined course should not be made a blueprint');
+        stepCallback(null, course);
+        return;
+    }
 
-    /* How to report an error (Replace "moduleName") */
-    // course.throwErr('moduleName', e);
-
-    /* You should never call the stepCallback with an error. We want the
-    whole program to run when testing so we can catch all existing errors */
-
-    stepCallback(null, course);
+    // make the course a blueprint
+    canvas.put(`/api/v1/courses/${course.info.canvasOU}`, {
+        'course[blueprint]': true
+    }, (err, res) => {
+        if (err) {
+            course.throwErr('course-make-blueprint', err);
+            stepCallback(null, course);
+            return;
+        }
+        course.success('course-make-blueprint', `${course.info.courseName} is now a blueprint course`);
+        stepCallback(null, course);
+    });
 };
