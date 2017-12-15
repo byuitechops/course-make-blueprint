@@ -11,7 +11,9 @@ const canvas = require('canvas-wrapper');
 module.exports = (course, stepCallback) => {
     course.addModuleReport('course-make-blueprint');
 
+    /* Don't run if it's not an online course */
     if (course.settings.online === false) {
+        course.info.isBlueprint = false; // should this be determined earlier?
         course.success('course-make-blueprint', 'course-make-blueprint successfully determined course should not be made a blueprint');
         stepCallback(null, course);
         return;
@@ -26,6 +28,7 @@ module.exports = (course, stepCallback) => {
             stepCallback(null, course);
             return;
         }
+        course.info.isBlueprint = true;
         course.success('course-make-blueprint', `${course.info.courseName} is now a blueprint course`);
         stepCallback(null, course);
     });
