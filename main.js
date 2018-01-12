@@ -45,6 +45,7 @@ module.exports = (course, stepCallback) => {
                 return;
             }
             course.success('course-make-blueprint', 'Locking items by object type enabled');
+            course.info.lockByObj = true;
 
             /* Enable locking points & content on all obj types */
             resObj = {
