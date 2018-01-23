@@ -10,12 +10,10 @@ const canvas = require('canvas-wrapper'),
     asyncLib = require('async');
 
 module.exports = (course, stepCallback) => {
-    course.addModuleReport('course-make-blueprint');
-
     /* Don't run if it's not an online course */
     if (course.settings.online === false) {
         course.info.isBlueprint = false; // should this be determined earlier?
-        course.success('course-make-blueprint', 'course-make-blueprint successfully determined course should not be made a blueprint');
+        course.message('course-make-blueprint successfully determined course should not be made a blueprint');
         stepCallback(null, course);
         return;
     }
@@ -28,23 +26,23 @@ module.exports = (course, stepCallback) => {
         'course[blueprint]': true
     }, (err, res) => {
         if (err) {
-            course.throwErr('course-make-blueprint', err);
+            course.error(err);
             stepCallback(null, course);
             return;
         }
         course.info.isBlueprint = true;
-        course.success('course-make-blueprint', `${course.info.fileName.split('.zip')[0]} is now a blueprint course`);
+        course.log('Enable Blueprint', {'Blueprint Enabled': true});
 
         /* Enable locking items by object */
         canvas.put(`/api/v1/courses/${course.info.canvasOU}`, {
             'course[use_blueprint_restrictions_by_object_type]': true,
         }, (err) => {
             if (err) {
-                course.throwError('blueprint-lock-items', err);
+                course.error(err);
                 stepCallback(null, err);
                 return;
             }
-            course.success('course-make-blueprint', 'Locking items by object type enabled');
+            course.message('course-make-blueprint', 'Locking items by object type enabled');
             course.info.lockByObj = true;
 
             /* Enable locking points & content on all obj types */
@@ -60,11 +58,11 @@ module.exports = (course, stepCallback) => {
 
             canvas.put(`/api/v1/courses/${course.info.canvasOU}`, resObj, (err, result) => {
                 if (err) {
-                    course.throwErr('course-make-blueprint', err);
+                    course.error(err);
                     stepCallback(null, course);
                     return;
                 }
-                course.success('course-make-blueprint', 'Content and points locked for all object types');
+                course.message('Content and points locked for all object types');
                 stepCallback(null, course);
             });
         });
