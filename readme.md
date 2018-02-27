@@ -1,5 +1,49 @@
-# Description #
-This is a child module of the d2l-to-canvas-conversion-tool. It is a postImport module used to make the new canvas course a blueprint course. 
-It uses the properties in the settings and info sections of the course object to determine if the course should be converted to a blueprint course or not.
+# Course Make Blueprint
+### *Package Name*: course-make-blueprint
+### *Child Type*: Post-import
+### *Platform*: Online
+### *Required*: Required
 
-It also enables locking by object type and enables locking points & content where appropriate. It adds a boolean value to course.info.lockByObj to notify future child modules that it ran successfully
+This child module is built to be used by the Brigham Young University - Idaho D2L to Canvas Conversion Tool. It utilizes the standard `module.exports => (course, stepCallback)` signature and uses the Conversion Tool's standard logging functions. You can view extended documentation [Here](https://github.com/byuitechops/d2l-to-canvas-conversion-tool/tree/master/documentation).
+
+## Purpose
+
+This child module makes the new Canvas Course a blueprint course. It enables locking by object type and enables locking points & content where appropriate.
+
+## How to Install
+
+```
+npm install course-make-blueprint
+```
+
+## Run Requirements
+This child module requires the following fields in the course.info object:
+* `canvasOU`
+
+## Options
+| Option | Values | Description |
+|--------|--------|-------------|
+|online| true/false | must be set to true for module to run|
+
+## Outputs
+| Option | Type | Location |
+|--------|--------|-------------|
+|isBlueprint| Bool | course.info|
+|lockByObj| Bool | course.info|
+
+## Process
+
+Describe in steps how the module accomplishes its goals.
+
+1. Enable blueprint setting in Canvas
+2. Enable locking items by object
+3. Enable locking points & content on all obj types
+
+## Log Categories
+Categories used in logging data in this module.
+
+- Enable Blueprint
+
+## Requirements
+
+Make the course a blueprint course and enable locking items so blueprint-lock-items can run
