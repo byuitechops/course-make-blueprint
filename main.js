@@ -1,16 +1,12 @@
-/*eslint-env node, es6*/
-
 /* Module Description */
 /* Makes the current course a blueprint course*/
 
-/* Put dependencies here */
 const canvas = require('canvas-wrapper');
 
 module.exports = (course, stepCallback) => {
     /* Don't run if it's not an online course */
     if (course.settings.online === false) {
         course.newInfo('isBlueprint', false);
-        // course.info.isBlueprint = false; // should this be determined earlier?
         course.message('course-make-blueprint successfully determined course should not be made a blueprint');
         stepCallback(null, course);
         return;
@@ -42,7 +38,6 @@ module.exports = (course, stepCallback) => {
             }
             course.message('course-make-blueprint', 'Locking items by object type enabled');
             course.newInfo('lockByObj', true);
-            // course.info.lockByObj = true;
 
             /* Enable locking points & content on all obj types */
             var resObj = {
