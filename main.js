@@ -1,6 +1,4 @@
 /*eslint-env node, es6*/
-/*eslint no-console:1*/
-
 
 /* Module Description */
 /* Makes the current course a blueprint course*/
@@ -11,7 +9,8 @@ const canvas = require('canvas-wrapper');
 module.exports = (course, stepCallback) => {
     /* Don't run if it's not an online course */
     if (course.settings.online === false) {
-        course.info.isBlueprint = false; // should this be determined earlier?
+        course.newInfo('isBlueprint', false);
+        // course.info.isBlueprint = false; // should this be determined earlier?
         course.message('course-make-blueprint successfully determined course should not be made a blueprint');
         stepCallback(null, course);
         return;
@@ -23,7 +22,7 @@ module.exports = (course, stepCallback) => {
      **********************************/
     canvas.put(`/api/v1/courses/${course.info.canvasOU}`, {
         'course[blueprint]': true
-    }, (err, res) => {
+    }, (err) => {
         if (err) {
             course.error(err);
             stepCallback(null, course);
@@ -42,7 +41,8 @@ module.exports = (course, stepCallback) => {
                 return;
             }
             course.message('course-make-blueprint', 'Locking items by object type enabled');
-            course.info.lockByObj = true;
+            course.newInfo('lockByObj', true);
+            // course.info.lockByObj = true;
 
             /* Enable locking points & content on all obj types */
             var resObj = {
@@ -55,7 +55,7 @@ module.exports = (course, stepCallback) => {
                 }
             };
 
-            canvas.put(`/api/v1/courses/${course.info.canvasOU}`, resObj, (err, result) => {
+            canvas.put(`/api/v1/courses/${course.info.canvasOU}`, resObj, (err) => {
                 if (err) {
                     course.error(err);
                     stepCallback(null, course);
