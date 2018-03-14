@@ -6,8 +6,7 @@
 /* Makes the current course a blueprint course*/
 
 /* Put dependencies here */
-const canvas = require('canvas-wrapper'),
-    asyncLib = require('async');
+const canvas = require('canvas-wrapper');
 
 module.exports = (course, stepCallback) => {
     /* Don't run if it's not an online course */
@@ -46,7 +45,7 @@ module.exports = (course, stepCallback) => {
             course.info.lockByObj = true;
 
             /* Enable locking points & content on all obj types */
-            resObj = {
+            var resObj = {
                 'course[blueprint_restrictions_by_object_type]': {
                     'assignment': {'content': true, 'points': true},
                     'attachment': {'content': true},
@@ -54,7 +53,7 @@ module.exports = (course, stepCallback) => {
                     'quiz': {'content': true, 'points': true},
                     'wiki_page': {'content': true}
                 }
-            }
+            };
 
             canvas.put(`/api/v1/courses/${course.info.canvasOU}`, resObj, (err, result) => {
                 if (err) {
