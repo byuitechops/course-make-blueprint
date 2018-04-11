@@ -5,9 +5,10 @@ const canvas = require('canvas-wrapper');
 
 module.exports = (course, stepCallback) => {
     /* Don't run if it's not an online course */
-    if (course.settings.online === false) {
+    var validPlatforms = ['online', 'pathway'];
+    if (!validPlatforms.includes(course.settings.platform)) {
         course.newInfo('isBlueprint', false);
-        course.message('course-make-blueprint successfully determined course should not be made a blueprint');
+        course.message('Invalid platform. Skipping child module');
         stepCallback(null, course);
         return;
     }
