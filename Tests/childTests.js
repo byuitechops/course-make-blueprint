@@ -5,11 +5,17 @@ const canvas = require('canvas-wrapper');
 module.exports = (course, callback) => {
     tap.test('child-template', (test) => {
 
-        test.pass('potato');
-        test.pass('tomato');
-        test.fail('avacado');
+        canvas.get(`/api/v1/courses/${course.info.canvasOU}`, (err, courseArr) => {
+            if (err) {
+                course.error(err);
+                test.end();
+            }
 
-        test.end();
+            test.ok(courseArr[0].blueprint, true);
+            test.end();
+        });
+
+
     });
 
     callback(null, course);
