@@ -4,8 +4,7 @@
     "description": "Makes a course a blueprint course",
     "main": "main.js",
     "dependencies": {
-        "canvas-wrapper": "github:byuitechops/canvas-wrapper",
-        "create-course-object": "github:byuitechops/create-course-object"
+        "canvas-wrapper": "github:byuitechops/canvas-wrapper"
     },
     "devDependencies": {
         "async": "^2.6.0",
