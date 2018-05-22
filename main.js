@@ -4,15 +4,6 @@
 const canvas = require('canvas-wrapper');
 
 module.exports = (course, stepCallback) => {
-    /* Don't run if it's not an online course */
-    var validPlatforms = ['online', 'pathway'];
-    if (!validPlatforms.includes(course.settings.platform)) {
-        course.newInfo('isBlueprint', false);
-        course.message('Invalid platform. Skipping child module');
-        stepCallback(null, course);
-        return;
-    }
-
     /*********************************
      * START HERE
      * make the course a blueprint 
@@ -25,29 +16,29 @@ module.exports = (course, stepCallback) => {
             stepCallback(null, course);
             return;
         }
-        course.info.isBlueprint = true;
+        course.newInfo('isBlueprint', true);
         course.log('Enable Blueprint', {'Blueprint Enabled': true});
 
         /* Enable locking items by object */
         canvas.put(`/api/v1/courses/${course.info.canvasOU}`, {
-            'course[use_blueprint_restrictions_by_object_type]': true,
+            'course[use_blueprint_restrictions]': true,
         }, (err) => {
             if (err) {
                 course.error(err);
                 stepCallback(null, err);
                 return;
             }
-            course.message('course-make-blueprint', 'Locking items by object type enabled');
-            course.newInfo('lockByObj', true);
+            /* This property is required for blueprint lock items to run */
+            course.newInfo('lockingEnabled', true);
+            course.message('General Locked Objects enabled');
 
             /* Enable locking points & content on all obj types */
             var resObj = {
-                'course[blueprint_restrictions_by_object_type]': {
-                    'assignment': {'content': true, 'points': true},
-                    'attachment': {'content': true},
-                    'discussion_topic': {'content': true, 'points': true},
-                    'quiz': {'content': true, 'points': true},
-                    'wiki_page': {'content': true}
+                'course[blueprint_restrictions]': {
+                    'content': true,
+                    'points': true,
+                    'due_dates': true,
+                    'availability_dates': true
                 }
             };
 
@@ -57,7 +48,7 @@ module.exports = (course, stepCallback) => {
                     stepCallback(null, course);
                     return;
                 }
-                course.message('Content and points locked for all object types');
+                course.log('General Locked Objects Enabled', {'Enabled': true});
                 stepCallback(null, course);
             });
         });

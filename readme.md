@@ -28,8 +28,8 @@ This child module requires the following fields in the course.info object:
 ## Outputs
 | Option | Type | Location |
 |--------|--------|-------------|
-|isBlueprint| Bool | course.info|
-|lockByObj| Bool | course.info|
+|isBlueprint | Bool | course.info|
+|lockingEnabled | Bool | course.info|
 
 ## Process
 
@@ -43,6 +43,7 @@ Describe in steps how the module accomplishes its goals.
 Categories used in logging data in this module.
 
 - Enable Blueprint
+- General Locked Objects Enabled
 
 ## Requirements
 
